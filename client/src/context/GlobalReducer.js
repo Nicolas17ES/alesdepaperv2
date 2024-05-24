@@ -30,6 +30,16 @@ const globalReducer = (state, action) => {
                 ...state,
                 clientSecret: action.payload,
             }
+        case 'SET_EMAIL_STATE':
+            return {
+                ...state,
+                emailState: action.payload,
+            }
+        case 'SET_BIRDS':
+            return {
+                ...state,
+                birds: action.payload,
+            }
             case 'RESET_STATE':
                 return {
                   ...initialState,

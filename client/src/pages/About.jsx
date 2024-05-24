@@ -1,4 +1,5 @@
-// The Projects component displays project sections and handles animations based on mouse movements.
+import { useState, useContext } from "react";
+
 function About() {
 
 

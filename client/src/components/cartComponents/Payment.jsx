@@ -1,7 +1,5 @@
 import { useEffect, useContext } from "react";
-
 import { Elements } from "@stripe/react-stripe-js";
-
 import CheckoutForm from "./CheckoutForm";
 import {fetchPublishableKey, postPaymentIntent} from '../../context/GlobalAction'
 import GlobalContext from "../../context/GlobalContext";

@@ -14,6 +14,9 @@ export const initialState = {
     birds: [],
     stripePromise: null,
     clientSecret: null,
+    emailState: false,
+    birds: null,
+    singleBird: null,
         
 }
 export const GlobalProvider = ({children}) => {
@@ -25,6 +28,9 @@ export const GlobalProvider = ({children}) => {
         birds: state.birds,
         stripePromise: state.publishableKey,
         clientSecret: state.clientSecret,
+        emailState: state.emailState,
+        birds: state.birds,
+        singleBird: state.singleBird,
         dispatch,
     }}>
         {children}
