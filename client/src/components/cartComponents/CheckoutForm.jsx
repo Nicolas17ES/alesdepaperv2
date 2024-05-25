@@ -6,7 +6,7 @@ import GlobalContext from "../../context/GlobalContext";
 
 export default function CheckoutForm() {
   
-  const {dispatch} = useContext(GlobalContext)
+  const {dispatch} = useContext(GlobalContext);
 
   const stripe = useStripe();
   const elements = useElements();

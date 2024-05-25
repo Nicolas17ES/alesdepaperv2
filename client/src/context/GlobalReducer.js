@@ -40,6 +40,11 @@ const globalReducer = (state, action) => {
                 ...state,
                 birds: action.payload,
             }
+        case 'SET_SINGLE_BIRD':
+            return {
+                ...state,
+                singleBird: action.payload,
+            }
             case 'RESET_STATE':
                 return {
                   ...initialState,

@@ -57,23 +57,33 @@ export const paymentConfirmationEmail = async (dispatch, data) => {
 // PRODUCTS
 export const fetchBirds = async (dispatch) => { 
   try {
-    const response = await fetch("/birds/get");
-    const birds = await response.json();
-    dispatch({ type: 'SET_BIRDS', payload: birds });
 
+    const response = await fetch("/birds/get");
+
+    const birds = await response.json();
+
+    dispatch({ type: 'SET_BIRDS', payload: birds });
+    
   } catch (error) {
+
     console.error("Error fetching data:", error);
+
   }
 };
 
 export const fetchSingleBird = async (dispatch, id) => { 
+
   try {
     const response = await fetch(`/birds/get/${id}`);
+
     const singleBird = await response.json();
+
     dispatch({ type: 'SET_SINGLE_BIRD', payload: singleBird });
 
   } catch (error) {
+
     console.error("Error fetching data:", error);
+
   }
 };
 
