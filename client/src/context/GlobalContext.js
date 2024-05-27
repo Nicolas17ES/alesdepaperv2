@@ -17,6 +17,7 @@ export const initialState = {
     emailState: false,
     birds: null,
     singleBird: null,
+    displayCart: false,
         
 }
 export const GlobalProvider = ({children}) => {
@@ -31,6 +32,7 @@ export const GlobalProvider = ({children}) => {
         emailState: state.emailState,
         birds: state.birds,
         singleBird: state.singleBird,
+        displayCart: state.displayCart,
         dispatch,
     }}>
         {children}

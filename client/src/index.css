@@ -169,9 +169,11 @@ small {
   right: 20px;
   padding: 0;
   margin: 0;
+  cursor: pointer;
+  z-index: 9;
 }
 .cart-icon{
-
+  font-weight: 800 !important;
 }
 
 
@@ -245,6 +247,9 @@ small {
 .page-container{
   width: 100%;
   display: flex;
+  position: relative;
+  
+
 }
 /* HOME */
 
@@ -254,6 +259,7 @@ small {
   display: flex;
   flex-wrap: wrap;
   padding: 30px 100px 0px 100px;
+  box-sizing: border-box;
 }
 
 /* sinlge bird */
@@ -271,17 +277,29 @@ small {
 /* bird description */
 
 .bird-description-container{
-
+  width: 20%;
+  height: 100vh;
 }
 .bird-description-image{
-  width: 300px;
+  width: 100%;
   height: auto;
+   height: 100%; /* Occupies 100% of the parent's height */
+  object-fit: cover;
 }
 
 /* bird gallery */
 
 .bird-gallery-container{
+ width: 50%; /* Occupies 50% of the screen width */
+  height: 100vh;
+  padding-left:50px;
+ 
+}
 
+.bird-gallery-image{
+ width: 100%; /* Occupies 100% of the parent's width */
+  height: 100%; /* Occupies 100% of the parent's height */
+  object-fit: cover;
 }
 
 /* ABOUT */

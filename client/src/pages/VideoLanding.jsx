@@ -37,7 +37,7 @@ function VideoLanding() {
   useEffect(() => {
     if(isVideoLoaded){
       gsap.from(videoRef.current, 
-        { y: '-100vh', duration: 1.3, ease: 'power1.out', delay: 2, onComplete: () => {
+        { y: '-100vh', duration: 1.3, ease: 'power1.out', delay: 2.4, onComplete: () => {
           if (videoRef.current.paused) {
             videoRef.current.play();
           }

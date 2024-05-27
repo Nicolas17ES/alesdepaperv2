@@ -1,4 +1,6 @@
  import BirdImage from '../../assets/birdGallery.png'
+ import BirdImage2 from '../../assets/birdGallery.png'
+ import BirdImage3 from '../../assets/birdGallery.png'
 
 function BirdGallery() {
 

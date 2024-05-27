@@ -27,32 +27,53 @@ function SingleBird({ bird, onDisplayBirdsData }) {
 
     // Get the current position of the bird
     const { x, y } = birdRef.current.getBoundingClientRect();
+    console.log('x:', x, ' && ', 'y: ', y)
 
     // Calculate the difference between the current position and the top-left corner of the screen
     const deltaX = -x; // Move left
     const deltaY = -y; // Move up
+
+    console.log('delatX:', deltaX, ' && ', 'delatY: ', deltaY)
 
     // Animate the bird to the top-left corner of the screen
     gsap.to(birdRef.current, {
       x: deltaX + 150,
       y: deltaY + 50,
       duration: 1.5,
-      scale: 1.2,
       delay: 1,
       ease: 'power1.inOut',
+      onComplete: () => {
+        const { x: xFinal, y: yFinal } = birdRef.current.getBoundingClientRect();
+        const deltaX = xFinal + x - 150 ; // Move left
+        const deltaY = y; // Move up
+
+        birdRef.current.style.position = 'fixed';
+        birdRef.current.style.left = `${deltaX}px`;
+        birdRef.current.style.top = `${deltaY}px`;
+      }
+      
     });
 
     // Animate all other birds to move in a random unique direction
     const otherBirds = document.querySelectorAll(`.single-bird-container:not(#bird-${bird.id})`);
+    const usedDirections = new Set();
+
     otherBirds.forEach((otherBird) => {
-      const { x, y } = getRandomDirection();
+      let direction;
+      do {
+        direction = getRandomDirection();
+      } while (usedDirections.has(`${direction.x},${direction.y}`));
+      usedDirections.add(`${direction.x},${direction.y}`);
 
       gsap.to(otherBird, {
-        x: `+=${x}`,
-        y: `+=${y}`,
+        x: `+=${direction.x}`,
+        y: `+=${direction.y}`,
         duration: 4,
         ease: 'power1.inOut',
-        onComplete: onDisplayBirdsData,
+        onComplete: () => {
+          otherBird.style.display = 'none';
+          onDisplayBirdsData(); // Call the function after hiding the bird
+        }
       });
     });
   };
