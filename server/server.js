@@ -22,7 +22,9 @@ app.use((req, res, next) => {
   next();
 });
 
-
+// parse the body of the request
+app.use(express.json());
+app.use(express.urlencoded({extended: false}));
 app.use(express.static(process.env.STATIC_DIR));
 
 app.get("/", (req, res) => {
@@ -30,10 +32,6 @@ app.get("/", (req, res) => {
   res.sendFile(path);
 });
 
-
-// parse the body of the request
-app.use(express.json());
-app.use(express.urlencoded({extended: false}));
 
 app.use('/birds', require('./routes/birdRoutes'));
 app.use('/stripe', require('./routes/stripeRoutes'));

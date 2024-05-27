@@ -8,8 +8,7 @@ const getProducts = asyncHandler(async (req, res) => {
 
   try{
     const sql =`SELECT * from productos;`;                   
-
-        
+       
     let productsExist = false;
     const result = await query(sql);
 
@@ -22,14 +21,18 @@ const getProducts = asyncHandler(async (req, res) => {
     } else {
         res.status(200).send('No products found')
     }
+
   } catch (error) {
       console.error(error);
       res.status(500).send('Error searching for products');
     }
+
 });
 
 const getSingleProduct = asyncHandler(async (req, res) => {
+
     const { id } = req.params;
+
     try{
         const sql =`SELECT * from productos WHERE id = ${id};`;                   
 
@@ -42,7 +45,7 @@ const getSingleProduct = asyncHandler(async (req, res) => {
         }   
 
         if(productExist){
-            res.status(200).json(result)
+            res.status(200).json(result[0])
         } else {
             res.status(200).send('No products found')
         }
@@ -51,6 +54,7 @@ const getSingleProduct = asyncHandler(async (req, res) => {
         console.error(error);
         res.status(500).send('Error searching for products');
     }
+    
 });
 
 module.exports = {
