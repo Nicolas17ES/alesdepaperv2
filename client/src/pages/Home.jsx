@@ -4,49 +4,63 @@ import BirdDescription from '../components/homeComponents/BirdDescription'
 import BirdsGrid from '../components/homeComponents/BirdsGrid'
 import CartIcon from '../components/shared/Cart'
 import Payment from '../components/cartComponents/Payment'
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import GlobalContext from "../context/GlobalContext";
 
 
 function Home() {
 
-    const {displayCart} = useContext(GlobalContext);
+    const {displayCart, disptach, displayBirdsData, cartItems} = useContext(GlobalContext);
+console.log("cartItems", cartItems)
+    useEffect(() => {
 
-    const [displayBirdsData, setDisplayBirdsData] = useState(false);
+        if (displayBirdsData) {
 
-    const displayBirdsDataFuntion = () => {
-        setDisplayBirdsData(true)
-    }
+        // Block Y-axis scrolling
+        document.body.style.overflowY = 'hidden';
 
-//     useEffect(() => {
-//     if (displayBirdsData) {
-//       // Block Y-axis scrolling
-//       document.body.style.overflowY = 'hidden';
-//     }
+        }
 
-//     return () => {
-//       // Revert to default scroll behavior
-//       document.body.style.overflowY = 'auto';
-//     };
-//   }, [displayBirdsData]);
+        return () => {
+        // Revert to default scroll behavior
+
+        document.body.style.overflowY = 'auto';
+
+        };
+
+    }, [displayBirdsData]);
   
-// style={{maxHeight: displayBirdsData ? '0vh' : 'auto'}}
     return (
+
         <div className="page-container">
-            <CartIcon/>
-            <BirdsGrid displayBirdsData={displayBirdsData} onDisplayBirdsData={displayBirdsDataFuntion}/>
+
+            {!displayCart && <CartIcon/>}
+
+            <BirdsGrid />
+
             {displayBirdsData && (
+
                 <>
                     <BirdDescription/>
+
                     {!displayCart ? (
+
                         <BirdGallery/>
+
                     ) : (
+
                         <Payment/>
+
                     )}
+
                 </>
+
             )}
+
         </div>
+
     );
+
 }
 
 export default Home;

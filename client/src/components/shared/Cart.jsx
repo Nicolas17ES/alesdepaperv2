@@ -6,7 +6,7 @@ function Cart() {
 
     return (
         <div onClick={() => setCartState(!cartState)} className="cart-icon-container">
-            <span className="cart-icon">shopping bag</span>
+            <button className="cart-icon">shopping bag</button>
         </div>
     );
 }

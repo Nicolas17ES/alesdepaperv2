@@ -4,7 +4,7 @@ import { useStripe, useElements } from "@stripe/react-stripe-js";
 import {paymentConfirmationEmail} from '../../context/GlobalAction'
 import GlobalContext from "../../context/GlobalContext";
 
-export default function CheckoutForm() {
+export default function CheckoutForm({selectedShippingMethod}) {
   
   const {dispatch} = useContext(GlobalContext);
 
@@ -20,7 +20,7 @@ export default function CheckoutForm() {
   const [city, setCity] = useState("");
   const [state, setState] = useState("");
   const [postalCode, setPostalCode] = useState("");
-
+console.log("selectedShippingMethod", selectedShippingMethod)
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -98,40 +98,47 @@ export default function CheckoutForm() {
         onChange={(e) => setName(e.target.value)}
         required
       />
-      <input
-        type="text"
-        placeholder="Street Address"
-        value={addressLine1}
-        onChange={(e) => setAddressLine1(e.target.value)}
-        required
-      />
-      <input
-        type="text"
-        placeholder="Apartment, suite, etc. (optional)"
-        value={addressLine2}
-        onChange={(e) => setAddressLine2(e.target.value)}
-      />
-      <input
-        type="text"
-        placeholder="City"
-        value={city}
-        onChange={(e) => setCity(e.target.value)}
-        required
-      />
-      <input
-        type="text"
-        placeholder="State"
-        value={state}
-        onChange={(e) => setState(e.target.value)}
-        required
-      />
-      <input
-        type="text"
-        placeholder="Postal Code"
-        value={postalCode}
-        onChange={(e) => setPostalCode(e.target.value)}
-        required
-      />
+      {
+        selectedShippingMethod === 1 && (
+          
+          <>
+            <input
+              type="text"
+              placeholder="Street Address"
+              value={addressLine1}
+              onChange={(e) => setAddressLine1(e.target.value)}
+              required
+            />
+            <input
+              type="text"
+              placeholder="Apartment, suite, etc. (optional)"
+              value={addressLine2}
+              onChange={(e) => setAddressLine2(e.target.value)}
+            />
+            <input
+              type="text"
+              placeholder="City"
+              value={city}
+              onChange={(e) => setCity(e.target.value)}
+              required
+            />
+            <input
+              type="text"
+              placeholder="State"
+              value={state}
+              onChange={(e) => setState(e.target.value)}
+              required
+            />
+            <input
+              type="text"
+              placeholder="Postal Code"
+              value={postalCode}
+              onChange={(e) => setPostalCode(e.target.value)}
+              required
+            />
+          </>
+        )
+      }
       <PaymentElement id="payment-element" />
       <button disabled={isProcessing || !stripe || !elements} id="submit">
         <span id="button-text">

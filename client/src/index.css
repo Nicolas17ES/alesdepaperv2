@@ -20,7 +20,7 @@ table, caption, tbody, tfoot, thead, tr, th, td,
 article, aside, canvas, details, embed, 
 figure, figcaption, footer, header, hgroup, 
 menu, nav, output, ruby, section, summary,
-time, mark, audio, video {
+time, mark, audio, video, table {
 	margin: 0;
 	padding: 0;
 	border: 0;
@@ -73,8 +73,11 @@ body {
 
 
 button {
+  padding: 0;
+  margin: 0;
   border: 0;
   cursor: pointer;
+  background: none;
 }
 
 
@@ -91,15 +94,11 @@ small {
 
 
 #payment-form {
-  border: #f6f9fc solid 1px;
-  border-radius: var(--radius);
-  padding: 20px;
-  margin: 20px 0;
-  box-shadow: 0 30px 50px -20px rgb(50 50 93 / 25%),
-    0 30px 60px -30px rgb(0 0 0 / 30%);
+  color: white !important;
 }
 
 #messages {
+
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New";
   display: none; /* hide initially, then show once the first message arrives */
   background-color: #0a253c;
@@ -153,11 +152,13 @@ small {
   left: 50%;
   transform: translateX(-50%);
 }
+
 .footer-links{
   display: flex;
   gap: 40px;
 
 }
+
 .footer-link{
 
 }
@@ -172,8 +173,61 @@ small {
   cursor: pointer;
   z-index: 9;
 }
+
 .cart-icon{
   font-weight: 800 !important;
+}
+
+/* CONTINUE SHOPPING */
+.continue-shopping-container{
+
+}
+
+.continue-shopping-button{
+  color: white !important;
+}
+
+/* PRODUCTS IN CART */
+
+.products-in-cart{
+  margin-top: 40px;
+  margin-bottom: 40px;
+}
+
+.products-in-cart table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.products-in-cart th, .products-in-cart td {
+  padding: 8px;
+  text-align: left;
+}
+.table-row{
+  margin-top: 20px;
+}
+
+.shippin-row-container{
+  width: 100%;
+  display: flex;
+  gap: 10px;
+}
+.shipping-title{
+  font-weight: 800;
+  margin-right: 15px;
+}
+
+.shipping-option{
+  color: white !important;
+}
+.international-shippings{
+  color: white !important;
+  font-size: .8rem;
+}
+
+
+.make-payment-button{
+  color: white !important;
 }
 
 
@@ -289,18 +343,46 @@ small {
 
 /* bird gallery */
 
-.bird-gallery-container{
- width: 50%; /* Occupies 50% of the screen width */
+.home-right-container {
+  width: 50%; /* Occupies 50% of the screen width */
   height: 100vh;
-  padding-left:50px;
- 
+  margin-left: 40px;
+  position: relative;
 }
 
-.bird-gallery-image{
- width: 100%; /* Occupies 100% of the parent's width */
+.bird-gallery-image {
+  width: 100%; /* Occupies 100% of the parent's width */
   height: 100%; /* Occupies 100% of the parent's height */
   object-fit: cover;
 }
+
+.swiper-container {
+  height: 100%;
+  width: 100%;
+  position: relative;
+}
+
+.swiper-button-prev,
+.swiper-button-next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  padding: 10px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.swiper-button-prev {
+  left: 10px;
+}
+
+.swiper-button-next {
+  right: 10px;
+}
+
 
 /* ABOUT */
 

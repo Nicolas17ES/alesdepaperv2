@@ -45,11 +45,21 @@ const globalReducer = (state, action) => {
                 ...state,
                 singleBird: action.payload,
             }
+        case 'SET_DISPLAY_BIRDS_DATA':
+            return {
+                ...state,
+                displayBirdsData: action.payload,
+            }
         case 'SET_DISPLAY_CART':
             return {
                 ...state,
                 displayCart: action.payload,
             }
+        case 'SET_ADD_TO_CART':
+            return {
+                ...state,
+                cartItems: [...state.cartItems, action.payload],
+            };
             case 'RESET_STATE':
                 return {
                   ...initialState,

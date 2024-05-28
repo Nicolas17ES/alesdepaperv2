@@ -4,7 +4,7 @@ import GlobalContext from "../../context/GlobalContext";
 import { fetchSingleBird } from '../../context/GlobalAction';
 import { gsap } from 'gsap';
 
-function SingleBird({ bird, onDisplayBirdsData }) {
+function SingleBird({ bird }) {
   const { dispatch } = useContext(GlobalContext);
   const birdRef = useRef(null);
 
@@ -27,13 +27,10 @@ function SingleBird({ bird, onDisplayBirdsData }) {
 
     // Get the current position of the bird
     const { x, y } = birdRef.current.getBoundingClientRect();
-    console.log('x:', x, ' && ', 'y: ', y)
 
     // Calculate the difference between the current position and the top-left corner of the screen
     const deltaX = -x; // Move left
     const deltaY = -y; // Move up
-
-    console.log('delatX:', deltaX, ' && ', 'delatY: ', deltaY)
 
     // Animate the bird to the top-left corner of the screen
     gsap.to(birdRef.current, {
@@ -56,6 +53,7 @@ function SingleBird({ bird, onDisplayBirdsData }) {
 
     // Animate all other birds to move in a random unique direction
     const otherBirds = document.querySelectorAll(`.single-bird-container:not(#bird-${bird.id})`);
+
     const usedDirections = new Set();
 
     otherBirds.forEach((otherBird) => {
@@ -72,17 +70,25 @@ function SingleBird({ bird, onDisplayBirdsData }) {
         ease: 'power1.inOut',
         onComplete: () => {
           otherBird.style.display = 'none';
-          onDisplayBirdsData(); // Call the function after hiding the bird
+          dispatch({
+            type: 'SET_DISPLAY_BIRDS_DATA',
+            payload: true,
+          })
         }
       });
     });
   };
 
   return (
+    
     <div id={`bird-${bird.id}`} onClick={openBirdData} className="single-bird-container">
+      
       <img src={BirdTest} alt="paper plane" className="bird-image" ref={birdRef} />
+      
     </div>
+    
   );
+  
 }
 
 export default SingleBird;
