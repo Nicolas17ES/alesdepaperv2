@@ -21,66 +21,85 @@ const sendPublishableKey = asyncHandler(async (req, res) => {
 
 const paymentIntent = asyncHandler(async (req, res) => {
 
-  const id = req.body.ids;
+  const ids = req.body.ids;
 
-  const numberId = Number(id[0])
+  const shippingPrice = req.body.fees;
 
-  let product = {};
+  if (!ids || ids.length === 0) {
 
-  try{
-        const sql =`SELECT * from productos WHERE id = ${numberId};`;                   
+    return res.status(400).send('No products specified');
 
-        let productExist = false;
+  }
 
-        const result = await query(sql);
+  const countOccurrences = ids.reduce((acc, val) => {
 
-        if (result.length > 0){
+    acc[val] = (acc[val] || 0) + 1;
+    
+    return acc;
 
-            productExist = true;
+  }, {});
 
-        }   
 
-        if(productExist){
+  try {
+    // Create a single SQL query for one or more IDs
+    const sql = `SELECT * FROM productos WHERE id IN (${ids.join(',')})`;
 
-            product = result[0];
+    const result = await query(sql);
 
-        } else {
+    if (result.length === 0) {
 
-            res.status(200).send('No products found');
-
-        }
-        
-    } catch (error) {
-
-        console.error(error);
-        res.status(500).send('Error searching for products');
+      return res.status(404).send('No products found');
 
     }
 
-    if(Object.keys(product).length > 0){
+    // Calculate the total price
+ 
+    const totalPrice = result.reduce((acc, product) => {
 
-      try {
-        const paymentIntent = await stripe.paymentIntents.create({
-          currency: "EUR",
-          amount: product.precio,
-          automatic_payment_methods: { enabled: true },
-        });
+      if (countOccurrences[product.id] > 1) {
 
-        // Send publishable key and PaymentIntent details to client
-        res.send({clientSecret: paymentIntent.client_secret});
+        acc += product.precio * countOccurrences[product.id]; 
 
-      } catch (e) {
+      } else {
 
-          return res.status(400).send({
-            error: {
-                message: e.message,
-            },
-          });
+        acc += product.precio;
 
       }
 
+      return acc; 
+
+    }, 0);
+
+
+    let finalPrice;
+
+    if(shippingPrice){
+
+      finalPrice = totalPrice + shippingPrice;
+
+    } else {
+
+      finalPrice = totalPrice;
+
     }
-  
+
+    // Create the payment intent
+    const paymentIntent = await stripe.paymentIntents.create({
+      currency: "EUR",
+      amount: finalPrice,
+      automatic_payment_methods: { enabled: true },
+    });
+
+    // Send the clientSecret to the client
+    res.send({ clientSecret: paymentIntent.client_secret });
+
+  } catch (error) {
+
+    console.error(error);
+    res.status(500).send('Error processing payment');
+
+  }
+
 });
 
 const transporter = nodemailer.createTransport({
