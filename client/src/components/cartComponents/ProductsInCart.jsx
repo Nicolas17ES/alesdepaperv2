@@ -1,11 +1,10 @@
 import React, { useContext, useState, useEffect } from "react";
 import GlobalContext from "../../context/GlobalContext";
+import NumberDisplay from '../shared/NumberDisplay'
 
-function ProductsInCart({onShippingMethod, onMakePayment}) {
+function ProductsInCart({onMakePayment}) {
 
-  const { cartItems } = useContext(GlobalContext);
-
-  const [shippingMethod, setShippingMethod] = useState(0);
+  const { cartItems, dispatch, shippingMethod } = useContext(GlobalContext);
 
   const [shippingPrice, setShippingPrice] = useState(0);
 
@@ -33,7 +32,7 @@ function ProductsInCart({onShippingMethod, onMakePayment}) {
 
   const uniqueCartItems = Object.values(itemQuantities);
 
-// select shipping method
+  // select shipping method
   useEffect(() => {
 
       if(shippingMethod === 0){
@@ -71,16 +70,39 @@ function ProductsInCart({onShippingMethod, onMakePayment}) {
 
     }
 
-  }, [shippingMethod, shippingPrice]);
+  }, [shippingMethod, shippingPrice, cartItems]);
 
 //   change shipping method on parent component
 
-useEffect(() => {
+  // update the quanitty ofo a given item in cart
+  const updateItemsQuantity = (value, id) => {
 
-    onShippingMethod(shippingMethod)
+    if (value) {
 
-  }, [shippingMethod]);
+      dispatch({
+        type: 'SET_INCREASE_ITEM_QUANTITY',
+        payload: id,
+      });
 
+    } else {
+
+      dispatch({
+        type: 'SET_DECREASE_ITEM_QUANTITY',
+        payload: id,
+      });
+
+    }
+  }
+
+  // DEFINE /CHANGE SHIPPING METHOD:
+  const setShippingMethod = (value) => {
+
+    dispatch({
+        type: 'SET_SHIPPING_METHOD',
+        payload: value,
+      });
+    
+  }
 
 
   return (
@@ -88,22 +110,26 @@ useEffect(() => {
       <table>
         <thead>
           <tr>
-            <th></th>
-            <th>Quantity</th>
-            <th>Price</th>
+            <th className="column-name"></th>
+            <th className="column-quantity">Quantity</th>
+            <th className="column-price">Price</th>
           </tr>
         </thead>
         <tbody>
           {uniqueCartItems.map((item) => (
             <tr key={item.id}>
-              <td>{item.nombre}</td>
-              <td>{item.quantity}</td>
-              <td>{item.precio}</td>
+              <td className="column-name">{item.nombre}</td>
+              <td className="column-quantity">
+                {!onMakePayment && <button onClick={() => updateItemsQuantity(0, item.id)} className="update-items-quantity-button">{'<'}</button>}
+                {item.quantity}
+                {!onMakePayment && <button onClick={() => updateItemsQuantity(1, item.id)} className="update-items-quantity-button">{'>'}</button>}
+              </td>
+              {item.precio && <td className="column-price"><NumberDisplay number={item.precio}/></td>}
             </tr>
           ))}
 
             <tr>
-                <td>
+                <td className="column-name">
                     <div className="shippin-row-container">
                         <span className="shipping-title">shipping</span>
                             {!onMakePayment ? (
@@ -119,19 +145,19 @@ useEffect(() => {
                             )}
                     </div>
                 </td>
-                <td></td>
-                <td>{shippingPrice}</td>
+                <td className="column-quantity"></td>
+               {(shippingPrice && shippingMethod === 1) ?  <td className="column-price"><NumberDisplay number={shippingPrice} /></td> : null}
             </tr>
 
             <tr>
-                <td>Total</td>
-                <td></td>
-                <td>{finalPrice}</td>
+                <td className="column-name">Total</td>
+                <td className="column-quantity"></td>
+                {finalPrice && <td className="column-price"><NumberDisplay number={finalPrice} /></td>}
             </tr>
 
             {shippingMethod === 2 && (
                 <tr>
-                    <td>
+                    <td className="column-name">
                         <p className="international-shippings">
                             For international orders send an email to: dosalesdepaper@gmail.com
                         </p>

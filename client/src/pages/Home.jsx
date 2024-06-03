@@ -10,8 +10,8 @@ import GlobalContext from "../context/GlobalContext";
 
 function Home() {
 
-    const {displayCart, disptach, displayBirdsData, cartItems} = useContext(GlobalContext);
-console.log("cartItems", cartItems)
+    const {displayCart, dispatch, displayBirdsData, cartItems} = useContext(GlobalContext);
+
     useEffect(() => {
 
         if (displayBirdsData) {
@@ -29,6 +29,31 @@ console.log("cartItems", cartItems)
         };
 
     }, [displayBirdsData]);
+
+    // on unmount reset states
+
+    useEffect(() => {
+
+        return () => {
+
+            dispatch({
+                type: 'SET_DISPLAY_CART',
+                payload: false,
+            });
+
+            dispatch({
+                type: 'SET_DISPLAY_BIRDS_DATA',
+                payload: false,
+            });
+
+            dispatch({ 
+                type: 'SET_SINGLE_BIRD', 
+                payload: null 
+            });
+
+        };
+  }, [dispatch]);
+
   
     return (
 
@@ -49,13 +74,15 @@ console.log("cartItems", cartItems)
 
                     ) : (
 
-                        <Payment/>
+                        <Payment origin={false}/>
 
                     )}
 
                 </>
 
             )}
+
+            {(!displayBirdsData && displayCart) &&  <Payment origin={true}/>}
 
         </div>
 

@@ -1,22 +1,24 @@
 import React, { useRef } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation } from 'swiper';
-import 'swiper/swiper-bundle.min.css';
-
+import { Navigation, Pagination } from 'swiper/modules';
+import 'swiper/css';
 import BirdImage from '../../assets/birdGallery.png';
 import BirdImage2 from '../../assets/birdGallery.png';
 import BirdImage3 from '../../assets/birdGallery.png';
+import ContinueShopping from '../shared/ContinueShopping'
 
 function BirdGallery() {
   const swiperRef = useRef(null);
 
   return (
     <div className="home-right-container">
+      <ContinueShopping/>
       <div className="swiper-container">
         <Swiper
           modules={[Navigation]}
-          spaceBetween={10}
+          spaceBetween={0}
           slidesPerView={1}
+          loop={true}
           onSwiper={(swiper) => {
             swiperRef.current = swiper;
           }}

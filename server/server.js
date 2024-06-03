@@ -35,5 +35,7 @@ app.get("/", (req, res) => {
 
 app.use('/birds', require('./routes/birdRoutes'));
 app.use('/stripe', require('./routes/stripeRoutes'));
+app.use('/orders', require('./routes/ordersRoutes'));
+app.use('/user', require('./routes/userRoutes'));
 
 app.listen(PORT, () => console.log(`server started on port ${PORT}`));

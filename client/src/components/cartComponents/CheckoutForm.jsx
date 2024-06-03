@@ -4,9 +4,11 @@ import { useStripe, useElements } from "@stripe/react-stripe-js";
 import {paymentConfirmationEmail} from '../../context/GlobalAction'
 import GlobalContext from "../../context/GlobalContext";
 
-export default function CheckoutForm({selectedShippingMethod}) {
+export default function CheckoutForm({shippingPrice}) {
   
-  const {dispatch} = useContext(GlobalContext);
+  const {dispatch, shippingMethod, cartItems, clientSecret} = useContext(GlobalContext);
+
+  const shippingOptions = ['Local Pickup', 'Spain', 'International']
 
   const stripe = useStripe();
   const elements = useElements();
@@ -19,32 +21,29 @@ export default function CheckoutForm({selectedShippingMethod}) {
   const [addressLine2, setAddressLine2] = useState("");
   const [city, setCity] = useState("");
   const [state, setState] = useState("");
+  const [country, setCountry] = useState("");
   const [postalCode, setPostalCode] = useState("");
-console.log("selectedShippingMethod", selectedShippingMethod)
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!stripe || !elements) {
+    if (!stripe || !elements || !clientSecret) {
       return;
     }
 
-    if (!email || !name || !addressLine1 || !city || !state || !postalCode ) {
+    if (shippingMethod === 1 && (!email || !name || !addressLine1 || !addressLine2 || !city || !state || !postalCode || !country)) {
+
       setMessage('Please include all fields');
       return;
+
+    } else if ((shippingMethod === 0 || shippingMethod === 2) && (!email || !name))  {
+
+      setMessage('Please include all fields');
+      return
+
     }
 
-    setIsProcessing(true);
-    const cartData = {
-          email: email,
-          name: name,
-          address: {
-            line1: addressLine1,
-            line2: addressLine2,
-            city: city,
-            state: state,
-            postal_code: postalCode
-          }
-        } 
+    setIsProcessing(true); 
 
     const { error, paymentIntent } = await stripe.confirmPayment({
       elements,
@@ -59,6 +58,7 @@ console.log("selectedShippingMethod", selectedShippingMethod)
               line2: addressLine2,
               city: city,
               state: state,
+              country: country,
               postal_code: postalCode
             }
           }
@@ -67,19 +67,40 @@ console.log("selectedShippingMethod", selectedShippingMethod)
       redirect: 'if_required'
     });
 
-
-
-
     if (error && (error.type === "card_error" || error.type === "validation_error")) {
+
       setMessage(error.message);
+
     } else if (paymentIntent && paymentIntent.status === 'succeeded') {
+
+      const cartData = {
+        cart_items: cartItems,
+        email: email,
+        name: name,
+        shipping_address_line1: addressLine1,
+        shipping_address_line2: addressLine2,
+        shipping_city: city,
+        shipping_state: state,
+        shipping_postal_code: postalCode,
+        shipping_country: country,
+        stripe_payment_intent_id: paymentIntent.id,
+        status: 'paid',
+        shipping_method: shippingOptions[shippingMethod],
+        shipping_price: shippingPrice,
+      };
+
       paymentConfirmationEmail(dispatch, cartData)
+
       setMessage("Payment status: " + paymentIntent.status)
+
     } else {
+
       setMessage("An unexpected error occured.");
+
     }
 
     setIsProcessing(false);
+
   };
 
   return (
@@ -99,7 +120,7 @@ console.log("selectedShippingMethod", selectedShippingMethod)
         required
       />
       {
-        selectedShippingMethod === 1 && (
+        shippingMethod === 1 && (
           
           <>
             <input
@@ -131,6 +152,13 @@ console.log("selectedShippingMethod", selectedShippingMethod)
             />
             <input
               type="text"
+              placeholder="Country"
+              value={country}
+              onChange={(e) => setCountry(e.target.value)}
+              required
+            />
+            <input
+              type="text"
               placeholder="Postal Code"
               value={postalCode}
               onChange={(e) => setPostalCode(e.target.value)}
@@ -140,7 +168,7 @@ console.log("selectedShippingMethod", selectedShippingMethod)
         )
       }
       <PaymentElement id="payment-element" />
-      <button disabled={isProcessing || !stripe || !elements} id="submit">
+      <button className="submit-payment-button" disabled={isProcessing || !stripe || !elements} id="submit">
         <span id="button-text">
           {isProcessing ? "Processing ... " : "Pay now"}
         </span>

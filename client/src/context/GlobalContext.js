@@ -20,6 +20,7 @@ export const initialState = {
     displayCart: false,
     cartItems: [],
     displayBirdsData: false,
+    shippingMethod: 0,
         
 }
 export const GlobalProvider = ({children}) => {
@@ -37,6 +38,7 @@ export const GlobalProvider = ({children}) => {
         displayCart: state.displayCart,
         cartItems: state.cartItems,
         displayBirdsData: state.displayBirdsData,
+        shippingMethod: state.shippingMethod,
         dispatch,
     }}>
         {children}

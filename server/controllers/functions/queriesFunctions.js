@@ -1,9 +1,9 @@
 const db = require('../../config/db');
 
 // function for mysql queries
-const query = (sql) => {
+const query = (sql, values) => {
     return new Promise((resolve, reject) => {
-        db.query(sql, (err, result) => {
+        db.query(sql, values, (err, result) => {
             if (err) {
                 reject(err);
             } else {
@@ -13,4 +13,4 @@ const query = (sql) => {
     });
 };
 
-module.exports = {query}
+module.exports = { query };

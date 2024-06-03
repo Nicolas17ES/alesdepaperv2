@@ -4,7 +4,7 @@ import GlobalContext from "../../context/GlobalContext";
 
 function ContinueShopping() {
 
-    const { dispatch } = useContext(GlobalContext);
+    const { dispatch, displayCart } = useContext(GlobalContext);
 
     const continueShopping = () => {
 
@@ -26,7 +26,7 @@ function ContinueShopping() {
     }
 
     return (
-            <button onClick={continueShopping}  className="continue-shopping-button">continue shopping</button>
+            <button style={{color: displayCart ? 'white' : 'black'}} onClick={continueShopping}  className="continue-shopping-button">continue shopping</button>
     );
 }
 

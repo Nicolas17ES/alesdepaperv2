@@ -60,6 +60,36 @@ const globalReducer = (state, action) => {
                 ...state,
                 cartItems: [...state.cartItems, action.payload],
             };
+        case 'SET_SHIPPING_METHOD':
+            return {
+                ...state,
+                shippingMethod: action.payload,
+            };
+
+        case 'SET_INCREASE_ITEM_QUANTITY':
+
+            const itemToDuplicate = state.cartItems.find((item) => item.id === action.payload);
+
+            return {
+                ...state,
+                cartItems: itemToDuplicate ? [...state.cartItems, itemToDuplicate] : state.cartItems,
+            };
+
+        case 'SET_DECREASE_ITEM_QUANTITY':
+
+            const index = state.cartItems.findIndex(item => item.id === action.payload);
+
+            const newCartItems = [...state.cartItems];
+            
+            if (index !== -1) {
+                newCartItems.splice(index, 1);
+            }
+
+            return {
+                ...state,
+                cartItems: newCartItems,
+            };
+
             case 'RESET_STATE':
                 return {
                   ...initialState,

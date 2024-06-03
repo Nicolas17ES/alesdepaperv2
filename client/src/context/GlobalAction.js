@@ -24,10 +24,11 @@ export const fetchPublishableKey = async (dispatch) => {
 };
 
 
-export const postPaymentIntent = async (dispatch, info) => {
+export const postPaymentIntent = async (dispatch, info, shippingPriceInternal) => {
 
   const data = {
     ids: info,
+    fees: shippingPriceInternal,
   }
 
   try {
@@ -51,11 +52,13 @@ export const postPaymentIntent = async (dispatch, info) => {
   }
 };
 
+
+
 export const paymentConfirmationEmail = async (dispatch, data) => {
 
   try {
 
-    const response = await fetch("/stripe/email", {
+    const response = await fetch("/orders/post-payment", {
       method: "POST",
       headers: {
         'Content-Type': 'application/json', // Set Content-Type header

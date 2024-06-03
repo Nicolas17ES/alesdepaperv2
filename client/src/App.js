@@ -25,9 +25,10 @@ function App() {
 
 
 function WrappedApp() {
+
   const {dispatch} = useContext(GlobalContext);
   const location = useLocation();
-  
+
   useEffect(() => {
     fetchBirds(dispatch);
   }, [])

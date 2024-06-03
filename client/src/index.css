@@ -2,7 +2,6 @@
 
 :root {
   --light-grey: #f6f9fc;
-  --dark-terminal-color: #0a2540;
   --accent-color: #635bff;
   --radius: 3px;
 }
@@ -54,14 +53,13 @@ table {
 
 Link{
   text-decoration: none !important;
-  color: inherit !important;
+  color: inherit;
 }
 
 
 body {
   font-family: "Raleway";
   font-size: 1em;
-  color: var(--dark-terminal-color);
   margin: 0;
   padding: 0;
   line-height: 1;
@@ -84,7 +82,7 @@ button {
 
 a {
   text-decoration: none !important;
-  color: inherit !important;
+  color: inherit;
   font-size: inherit;
 }
 
@@ -117,6 +115,7 @@ small {
     left: 20px;
     padding: 0;
     margin: 0;
+    z-index: 99;
 }
 
 /* Style the list of links */
@@ -139,7 +138,9 @@ small {
     font-size: 16px; /* Font size */
     transition: color 0.3s; /* Smooth color transition on hover */
     font-weight: 800;
+    cursor: pointer;
 }
+
 .navbar-link:nth-child(1) {
   font-size: 1.4rem;
 }
@@ -151,16 +152,16 @@ small {
   bottom: 15px; 
   left: 50%;
   transform: translateX(-50%);
+  z-index: 999
 }
 
 .footer-links{
   display: flex;
-  gap: 40px;
+  gap: 60px;
 
 }
 
 .footer-link{
-
 }
 
 /* CART CONTAINET ICON */
@@ -179,12 +180,15 @@ small {
 }
 
 /* CONTINUE SHOPPING */
-.continue-shopping-container{
-
-}
-
 .continue-shopping-button{
-  color: white !important;
+  position: absolute;
+  font-weight: 800 !important;
+  top: 20px;
+  left: 20px;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  z-index: 9;
 }
 
 /* PRODUCTS IN CART */
@@ -199,12 +203,25 @@ small {
   border-collapse: collapse;
 }
 
+
+.column-name {
+  width: 70%;
+}
+
+.column-quantity, .column-price {
+  width: 15%;
+}
+
 .products-in-cart th, .products-in-cart td {
   padding: 8px;
   text-align: left;
 }
 .table-row{
   margin-top: 20px;
+}
+
+.update-items-quantity-button{
+  color: white !important;
 }
 
 .shippin-row-container{
@@ -226,8 +243,12 @@ small {
 }
 
 
-.make-payment-button{
+.make-payment-button, .submit-payment-button{
   color: white !important;
+}
+
+.submit-payment-button{
+  margin: 20px 0;
 }
 
 
@@ -344,10 +365,26 @@ small {
 /* bird gallery */
 
 .home-right-container {
-  width: 50%; /* Occupies 50% of the screen width */
+  width: 48%; 
   height: 100vh;
   margin-left: 40px;
   position: relative;
+  background-color: black;
+}
+
+.home-right-fixed-container{
+  position: fixed;
+  width: calc(48% - 30px); 
+  height: 100vh;
+  background-color: black;
+  top: 0;
+  right: 0;
+  z-index: 99;
+  
+}
+
+.payment-container{
+  padding: 20px;
 }
 
 .bird-gallery-image {
@@ -381,6 +418,11 @@ small {
 
 .swiper-button-next {
   right: 10px;
+}
+
+.swiper-slide{
+  max-width: 100% !important;
+  width: 100% !important;
 }
 
 
