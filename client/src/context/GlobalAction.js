@@ -51,10 +51,10 @@ export const postPaymentIntent = async (dispatch, info, shippingPriceInternal) =
     console.error("Error posting payment intent:", error);
   }
 };
+// STRIPE
 
-
-
-export const paymentConfirmationEmail = async (dispatch, data) => {
+// ORDERS
+export const postPaymentProcess = async (dispatch, data) => {
 
   try {
 
@@ -77,7 +77,57 @@ export const paymentConfirmationEmail = async (dispatch, data) => {
   }
 };
 
-// STRIPE
+
+export const fetchAllOrders = async (dispatch, user) => {
+
+  try {
+
+    const response = await fetch("/orders/view-orders", {
+      headers: {
+        Authorization: `Bearer ${user.token}`,
+      },
+    });
+
+    const data = await response.json();
+    console.log("orders", data)
+
+    dispatch({ type: 'SET_ORDERS', payload: data });
+
+    return;
+
+  } catch (error) {
+
+    console.error("Error fetching orders:", error);
+
+  }
+};
+
+export const changeOrderStatus = async (user, data) => {
+
+  try {
+
+    const response = await fetch("/orders/view-orders", {
+      method: "PUT",
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${user.token}`,
+      },
+      body: JSON.stringify(data),
+      
+    });
+
+    const data = await response.json();
+
+    return data;
+
+  } catch (error) {
+
+    console.error("Error changing status:", error);
+
+  }
+};
+
+// ORDERS
 
 // PRODUCTS
 export const fetchBirds = async (dispatch) => { 
@@ -115,3 +165,79 @@ export const fetchSingleBird = async (dispatch, id) => {
 
 
 // PRODUCTS
+
+
+
+// AUTHENTICATION
+
+// Register user
+
+export const register = async (dispatch, userData) => { 
+
+  try {
+    const response = await fetch("/auth/register", {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json', // Set Content-Type header
+      },
+      body: JSON.stringify(userData),
+    });
+
+    const data = await response.json();
+
+    if (data) {
+
+      localStorage.setItem('user', JSON.stringify(data));
+      dispatch({ type: 'SET_USER', payload: data });
+      
+    }
+
+    return data
+
+  } catch (error) {
+
+    console.error("Error registering user:", error);
+
+    return null
+
+  }
+
+};
+
+// login user
+
+export const login = async (dispatch, userData) => { 
+
+  try {
+    const response = await fetch("/auth/login", {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json', // Set Content-Type header
+      },
+      body: JSON.stringify(userData),
+    });
+
+    const data = await response.json();
+
+    if (data) {
+      localStorage.setItem('user', JSON.stringify(data))
+    }
+
+    dispatch({ type: 'SET_USER', payload: data });
+
+    return data
+
+  } catch (error) {
+
+    console.error("Error registering user:", error);
+
+    return null
+
+  }
+
+};
+
+
+// AUTHENTICATION
+
+// 

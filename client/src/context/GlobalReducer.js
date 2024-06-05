@@ -15,6 +15,11 @@ import { initialState } from "./GlobalContext"
 
 const globalReducer = (state, action) => {
     switch(action.type){
+        case 'SET_USER':
+            return {
+                ...state,
+                user: action.payload,
+            }
         case 'SET_BIRDS':
             return {
                 ...state,
@@ -64,6 +69,12 @@ const globalReducer = (state, action) => {
             return {
                 ...state,
                 shippingMethod: action.payload,
+            };
+
+        case 'SET_ORDERS':
+            return {
+                ...state,
+                orders: action.payload,
             };
 
         case 'SET_INCREASE_ITEM_QUANTITY':

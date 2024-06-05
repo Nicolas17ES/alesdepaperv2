@@ -75,11 +75,21 @@ const postPaymentProcess = asyncHandler(async (req, res) => {
     customer_email: email,
     uniqueCartItems,
     stripe_payment_intent_id,
+    total_price,
+    shipping_price,
   }
 
-  await sendConfirmationEmails(req, res, mailData)
+  const emailState = await sendConfirmationEmails(req, res, mailData);
 
-  // await createOrder(req, res, orderData);
+  if (emailState) {
+    
+    await createOrder(req, res, orderData);
+    
+  } else {
+    
+    res.status(500).send({ error: "Failed to send confirmation emails." });
+    
+  }
 
 });
 
@@ -174,7 +184,7 @@ const generateOrderItems = async (orderId, item) => {
       parseFloat(item.precio)
     ];
 
-    const result = await query(sql, values);
+    await query(sql, values);
 
   } catch (error) {
 
@@ -205,6 +215,9 @@ const sendConfirmationEmails = asyncHandler(async (req, res, emailData) => {
   const email = emailData.customer_email;
   const uniqueCartItems = emailData.uniqueCartItems;
   const paymentId = emailData.stripe_payment_intent_id;
+  const total_price = emailData.total_price;
+  const shipping_price = emailData.shipping_price;
+  const shippingPrice = shipping_price > 0 ? shipping_price : 0;
 
 
   let emailStates = {
@@ -226,6 +239,8 @@ const sendConfirmationEmails = asyncHandler(async (req, res, emailData) => {
       <p>Your payment ID is: ${paymentId}</p>
       <h2>Products:</h2>
       ${productDetails}
+      <p>Shipping price: ${shippingPrice}</p>
+      <p>Total price: ${total_price}</p>
       <p>If you have any questions, please contact us with your payment ID.</p>
       <p>Best regards,<br>Ales de Paper</p>
     `,
@@ -243,6 +258,8 @@ const sendConfirmationEmails = asyncHandler(async (req, res, emailData) => {
       <p><strong>Payment ID:</strong> ${paymentId}</p>
       <h2>Products:</h2>
       ${productDetails}
+      <p>Shipping price: ${shippingPrice}</p>
+      <p>Total price: ${total_price}</p>
     `,
   };
 
@@ -263,7 +280,15 @@ const sendConfirmationEmails = asyncHandler(async (req, res, emailData) => {
     }
 
     // Send response with email states
-    res.send(emailStates);
+    if (emailStates.customerEmail && emailStates.selfEmail){
+
+      return true
+
+    } else {
+
+      return false
+
+    }
 
   } catch (error) {
     // Handle errors
@@ -277,9 +302,135 @@ const sendConfirmationEmails = asyncHandler(async (req, res, emailData) => {
 });
 
 
+const getAllOrders = asyncHandler(async (req, res) => {
+  try {
+    const sql = `
+      SELECT 
+          o.id AS order_id,
+          o.customer_name,
+          o.customer_email,
+          o.shipping_address_line1,
+          o.shipping_address_line2,
+          o.shipping_city,
+          o.shipping_state,
+          o.shipping_postal_code,
+          o.shipping_country,
+          o.total_price AS order_total_price,
+          o.shipping_method,
+          o.shipping_price,
+          o.stripe_payment_intent_id,
+          o.status AS order_status,
+          o.created_at AS order_created_at,
+          oi.id AS order_item_id,
+          oi.product_id,
+          oi.quantity,
+          oi.price AS order_item_price,
+          p.nombre AS product_name,
+          p.precio AS product_price
+      FROM 
+          orders o
+      JOIN 
+          order_items oi ON o.id = oi.order_id
+      JOIN 
+          productos p ON oi.product_id = p.id;
+    `;
+
+    const result = await query(sql);
+
+    const ordersMap = new Map();
+
+    for (let row of result) {
+      const {
+        order_id,
+        customer_name,
+        customer_email,
+        shipping_address_line1,
+        shipping_address_line2,
+        shipping_city,
+        shipping_state,
+        shipping_postal_code,
+        shipping_country,
+        order_total_price,
+        shipping_method,
+        shipping_price,
+        stripe_payment_intent_id,
+        order_status,
+        order_created_at,
+        product_name,
+        product_price,
+        quantity
+      } = row;
+
+      if (!ordersMap.has(order_id)) {
+        ordersMap.set(order_id, {
+          order_id,
+          customer_name,
+          customer_email,
+          shipping_address_line1,
+          shipping_address_line2,
+          shipping_city,
+          shipping_state,
+          shipping_postal_code,
+          shipping_country,
+          order_total_price,
+          shipping_method,
+          shipping_price,
+          stripe_payment_intent_id,
+          order_status,
+          order_created_at,
+          order_items: []
+        });
+      }
+
+      const order = ordersMap.get(order_id);
+      order.order_items.push({
+        product_name,
+        product_price,
+        quantity
+      });
+    }
+
+    const ordersArray = Array.from(ordersMap.values());
+
+    res.status(200).json(ordersArray);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error retrieving orders');
+  }
+});
+
+
+
+
+
+
+const changeOrderStatus = asyncHandler(async (req, res) => {
+
+  const status = req.body.status;
+  const id = req.body.id;
+
+  try {
+
+    const sql = `UPDATE orders SET status = ${status} WHERE id = ${id}`;
+    
+    res.status(200).json(ordersArray);
+
+  } catch (error) {
+
+    console.error(error);
+    res.status(500).send('Error retrieving orders');
+
+  }
+
+});
+
+
+
 
 module.exports = {
     postPaymentProcess,
+    getAllOrders,
+    changeOrderStatus,
     
 };
 

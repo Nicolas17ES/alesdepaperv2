@@ -12,6 +12,7 @@ const GlobalContext = createContext();
 
 export const initialState = {
     birds: [],
+    user: null,
     stripePromise: null,
     clientSecret: null,
     emailState: false,
@@ -21,6 +22,7 @@ export const initialState = {
     cartItems: [],
     displayBirdsData: false,
     shippingMethod: 0,
+    orders: null,
         
 }
 export const GlobalProvider = ({children}) => {
@@ -29,6 +31,7 @@ export const GlobalProvider = ({children}) => {
     const [state, dispatch] = useReducer(globalReducer, initialState)
 
     return <GlobalContext.Provider value={{
+        user: state.user,
         birds: state.birds,
         stripePromise: state.publishableKey,
         clientSecret: state.clientSecret,
@@ -39,6 +42,7 @@ export const GlobalProvider = ({children}) => {
         cartItems: state.cartItems,
         displayBirdsData: state.displayBirdsData,
         shippingMethod: state.shippingMethod,
+        orders: state.orders,
         dispatch,
     }}>
         {children}

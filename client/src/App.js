@@ -5,6 +5,10 @@ import Home from "./pages/Home";
 import NavBar from './components/navigation/NavBar'
 import Footer from './components/navigation/Footer'
 import VideoLanding from "./pages/VideoLanding";
+import Login from './pages/auth/LogIn';
+import Register from './pages/auth/Register';
+import AdminPanel from './pages/Admin';
+import PrivateRoutes from './components/shared/accessRoutes/PrivateRoutes'
 import { GlobalProvider } from './context/GlobalContext'
 import { fetchBirds } from './context/GlobalAction'
 import GlobalContext from "./context/GlobalContext";
@@ -44,6 +48,11 @@ function WrappedApp() {
             <Route path="/home" element={<Home />} />
             <Route path="/about" element={<About />} />
             <Route path="/completion" element={<Completion />} />
+            <Route path='/login' element={<Login />} />
+            <Route path='/register' element={<Register />} />
+            <Route path='/admin-panel' element={<PrivateRoutes />}>
+              <Route path='/admin-panel' element={<AdminPanel />} />
+            </Route>
           </Routes>
           {location.pathname !== '/' && <Footer/>}
       </main>

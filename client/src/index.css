@@ -429,3 +429,102 @@ small {
 /* ABOUT */
 
 /* VIDEOLANDING */
+
+
+/* AUTHENTICATION */
+
+.auth-landings{
+  padding: 100px;
+}
+
+.title-auth{
+  text-align: center;
+  text-transform: uppercase;
+  margin-bottom: 30px;
+  font-weight: 600;
+}
+
+
+
+.heading {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 50px;
+  padding: 0 20px;
+}
+
+.form {
+  width: 70%;
+  margin: 0 auto;
+}
+.center-element{
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  text-align: center !important;
+  margin-bottom: 20px;
+}
+
+.form-group {
+  margin-bottom: 10px;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #e6e6e6;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  font-family: inherit;
+}
+
+.input-form{
+  width: 200px;
+  padding: 10px;
+  border: 1px solid #e6e6e6;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  font-family: inherit;
+}
+.input-form-center{
+  width: 300px;
+  padding: 10px;
+  border: 1px solid #e6e6e6;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  font-family: inherit;
+}
+
+
+
+/* admin panel */
+
+.admin-panel-container {
+    padding: 75px 50px;
+    max-width: 1200px;
+    margin: 0 auto;
+    font-family: Arial, sans-serif;
+}
+
+.search-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Nunito', sans-serif;
+  background-color: white;
+  border: 2px solid black;
+  color: black;
+  border-radius: 5px;
+  height: 30px;
+  padding: 10px;
+  width: 300px;
+  text-align: center;
+  margin: 30px auto;
+  font-size: 1.3rem;
+}
+
+.search-box::placeholder {
+  color: var(--gray);
+}

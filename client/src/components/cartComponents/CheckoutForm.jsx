@@ -1,7 +1,7 @@
 import { PaymentElement } from "@stripe/react-stripe-js";
 import { useState, useContext } from "react";
 import { useStripe, useElements } from "@stripe/react-stripe-js";
-import {paymentConfirmationEmail} from '../../context/GlobalAction'
+import {postPaymentProcess} from '../../context/GlobalAction'
 import GlobalContext from "../../context/GlobalContext";
 
 export default function CheckoutForm({shippingPrice}) {
@@ -89,7 +89,7 @@ export default function CheckoutForm({shippingPrice}) {
         shipping_price: shippingPrice,
       };
 
-      paymentConfirmationEmail(dispatch, cartData)
+      postPaymentProcess(dispatch, cartData)
 
       setMessage("Payment status: " + paymentIntent.status)
 

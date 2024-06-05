@@ -8,6 +8,7 @@ const {query} = require('./functions/queriesFunctions');
 // @access Public
 
 const registerUser = asyncHandler(async (req, res) => {
+
     const {email, username, password, role} = req.body;
 
     if( !email || !username || !password || !role ){
@@ -26,17 +27,28 @@ const registerUser = asyncHandler(async (req, res) => {
 
     if (userExists){
         res.status(400)
+        
         throw new Error('User already exists')
     }
 
     // if user does not exist HASH PASSWORD //
     const salt = await bcrypt.genSalt(10);
+
     const hashedPassword = await bcrypt.hash(password, salt)
 
     // Create user
 
     const sql2 = `INSERT INTO users (email, username, password, role) VALUES ('${email}', '${username}', '${hashedPassword}', '${role}');`;
+    
     const result2 = await query(sql2);
+    const users = {
+        _id: result2.insertId,
+        email: email,
+        username: username,
+        role: role,
+        token: generateToken(result2.insertId),
+    }
+
     res.status(200).json({
         _id: result2.insertId,
         email: email,
@@ -89,6 +101,7 @@ const loginUser = asyncHandler(async (req, res) => {
 // @desc Get current user
 // @route /discogs/users/me
 // @access Private
+
 const getMe  = asyncHandler(async(req, res) => {
     const user = {
         id: req.user.id,

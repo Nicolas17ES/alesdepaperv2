@@ -8,8 +8,6 @@ function NavBar() {
 
     const { displayCart } = useContext(GlobalContext);
 
-    console.log("displayCart", displayCart)
-
     return (
         <footer className="footer-container">
             <ul className="footer-links">
